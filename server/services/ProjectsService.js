@@ -19,6 +19,15 @@ class ProjectsService {
     const project = await dbContext.Projects.create(projectData)
     await project.populate('creator', 'name picture')
   }
+
+  async deleteProject(projectId, userId) {
+    const project = await this.getById(projectId)
+    if (userId !== project.creatorId.toString()) {
+      throw new Forbidden('The dark fire will not avail you, flame of Udûn! You Shall not pass!')
+    }
+    await project.remove()
+    return project
+  }
 }
 
 export const projectsService = new ProjectsService()
