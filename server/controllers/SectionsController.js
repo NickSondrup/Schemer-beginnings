@@ -10,6 +10,7 @@ export class SectionsController extends BaseController {
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.createSection)
       .put('/:sectionId', this.update)
+      .delete('/:sectionId', this.delete)
   }
 
   async getById(req, res, next) {
@@ -34,6 +35,15 @@ export class SectionsController extends BaseController {
   async update(req, res, next) {
     try {
       const section = await sectionsService.update(req.params.sectionId, req.userInfo.id, req.body)
+      res.send(section)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async delete(req, res, next) {
+    try {
+      const section = await sectionsService.delete(req.params.sectionId, req.userInfo.id)
       res.send(section)
     } catch (error) {
       next(error)

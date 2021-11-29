@@ -31,6 +31,15 @@ class SectionsService {
     await section.save()
     return section
   }
+
+  async delete(sectionId, userId) {
+    const section = await this.getById(sectionId)
+    if (userId !== section.creatorId.toString()) {
+      throw new Forbidden('The dark fire will not avail you, flame of Udûn! You Shall not pass!')
+    }
+    await section.remove()
+    return section
+  }
 }
 
 export const sectionsService = new SectionsService()
