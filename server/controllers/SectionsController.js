@@ -1,12 +1,14 @@
 import { Auth0Provider } from '@bcwdev/auth0provider'
 import BaseController from '../utils/BaseController.js'
 import { sectionsService } from '../services/SectionsService.js'
+import { sectionColorService } from '../services/SectionColorsService.js'
 
 export class SectionsController extends BaseController {
   constructor() {
     super('api/sections')
     this.router
       .get('/:sectionId', this.getById)
+      .get('/:sectionId/colors', this.getSectionColors)
       .use(Auth0Provider.getAuthorizedUserInfo)
       .post('', this.createSection)
       .put('/:sectionId', this.update)
@@ -17,6 +19,15 @@ export class SectionsController extends BaseController {
     try {
       const section = await sectionsService.getById(req.params.sectionId)
       res.send(section)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async getSectionColors(req, res, next) {
+    try {
+      const sectColors = await sectionColorService.getSectionColors(req.params.sectionId)
+      res.send(sectColors)
     } catch (error) {
       next(error)
     }
